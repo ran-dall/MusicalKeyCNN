@@ -37,14 +37,13 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-Install the required packages:
+Install FFmpeg, then install PyTorch for your CPU/CUDA environment using the [PyTorch selector](https://pytorch.org/get-started/locally/). Install a compatible TorchCodec build using the [TorchCodec installation guide](https://github.com/meta-pytorch/torchcodec#installing-torchcodec), then install the remaining dependencies:
 
-`pip install -r requirements.txt`
+```sh
+pip install -r requirements.txt
+```
 
-**Important**
-
-For PyTorch and torchaudio, follow the instructions at [https://pytorch.org/get-started/locally/](https://pytorch.org/get-started/locally/).
-Choose the correct command for your CUDA/cuDNN or CPU environment.
+TorchCodec decodes audio and converts it to mono. Resampling is performed explicitly with `librosa.resample(..., res_type="soxr_hq")` before CQT extraction.
 
 ## Key Prediction for Your Own Songs
 

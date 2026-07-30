@@ -1,5 +1,6 @@
 librosa
 numpy
+soxr
 tqdm
-#torch >= 2.0
-#torchaudio
+
+# Install compatible PyTorch and TorchCodec builds separately; see README.md.

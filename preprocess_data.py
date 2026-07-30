@@ -1,7 +1,7 @@
 from pathlib import Path
 from dataset import CAMELOT_MAPPING
 from tqdm import tqdm
-import torchaudio
+from audio_utils import load_audio_mono
 import librosa
 import numpy as np
 import pickle
@@ -51,15 +51,7 @@ def preprocess_data(dataset_dir, output_dir, pitch_range = (-4, 7)):
     # 2. Iterate over files and create spectral representations for all pitch shifts
     for file, _ in tqdm(data):
         filepath = audio_dir / file
-        waveform, sr = torchaudio.load(filepath)
-        # Convert stereo to mono if necessary
-        if waveform.shape[0] > 1:
-            waveform = waveform.mean(dim=0, keepdim=True)
-        # Resample to target sample rate if necessary
-        if sr != sample_rate:
-            resampler = torchaudio.transforms.Resample(orig_freq=sr, new_freq=sample_rate)
-            waveform = resampler(waveform)
-        waveform = waveform.squeeze(0).numpy()   # Convert tensor to numpy array for librosa
+        waveform = load_audio_mono(filepath, sample_rate=sample_rate)
 
         # For each pitch shift in the augmentation window
         for n_steps in range(pitch_range[0], pitch_range[1] + 1):
